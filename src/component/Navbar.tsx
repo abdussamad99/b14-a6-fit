@@ -1,13 +1,13 @@
-import Link from "next/link";
+import NavLinks from "@/component/NavLinks";
 
 const Navbar = () => {
-  const navlinks = (
+  const navlink = (
     <>
      <li>
-      <Link href={"/"}>Workouts</Link>
+      <NavLinks href={"/"}>Workouts</NavLinks>
      </li>
      <li>
-      <Link href={"/my-plan"}>My Plan</Link>
+      <NavLinks href={"/myplan"}>My-Plan</NavLinks>
      </li>
 
     </>
@@ -23,14 +23,14 @@ const Navbar = () => {
           <ul
             tabIndex={-1}
             className="menu menu-sm dropdown-content bg-base-100 text-[#9ca3af] rounded-box z-1 mt-3 w-52 p-2 shadow">
-            {navlinks}
+            {navlink}
           </ul>
         </div>
         <a className="btn btn-ghost text-xl text-[#ffffff]">FITLOG</a>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal text-[#9ca3af] px-1">
-          {navlinks}
+          {navlink}
         </ul>
       </div>
       <div className="navbar-end">
