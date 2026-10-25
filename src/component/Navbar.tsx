@@ -1,4 +1,6 @@
+import NavbarButtons from "@/component/Navbarbuttons";
 import NavLinks from "@/component/NavLinks";
+import Link from "next/link";
 
 const Navbar = () => {
   const navlink = (
@@ -33,8 +35,11 @@ const Navbar = () => {
           {navlink}
         </ul>
       </div>
-      <div className="navbar-end">
-        <a className="text-[#ffffff] cursor-pointer">Button</a>
+      <div className="navbar-end gap-2">
+        <NavbarButtons/>
+        {/* <Link className="btn" href={"/myplan"}><button>Plan(0)</button></Link>
+        <Link className="btn" href={"/mybuild"}><button>Saved(0)</button></Link> */}
+        {/* <a className="text-[#ffffff] cursor-pointer">Button</a> */}
       </div>
     </div>
   );

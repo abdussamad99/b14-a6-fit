@@ -1,8 +1,116 @@
-import React from 'react';
+"use client";
 
-const MyPlan = () => {
+import { useContextProvider } from "@/context/PlanContext";
+import Image from "next/image";
+import { useState } from "react";
+import toast from "react-hot-toast";
+// saved=wishlist
+const MyBuild = () => {
+    const { todaysPlan,
+    setTodaysPlan,
+    saved,
+    setSaved,} =
+        useContextProvider();
+    const [activeTab, setActiveTab] = useState<"todaysPlan" | "saved">("todaysPlan");
+    const [sortBy, setSortBy] = useState<"Time" | "Calories" | "rating">(
+        "Time",
+    );
+    const [orderedId, setOrderedId] = useState<number[]>([]);
+    //   console.log(sortBy);
+    //   console.log(activeTab);
+    const currentList = activeTab === "todaysPlan" ? todaysPlan : saved;
+
+    const sortedList = [...currentList].sort((a, b) => {
+        if (sortBy === "Time") return a.duration - b.duration;
+        if (sortBy === "Calories") return a.caloriesBurned - b.caloriesBurned;
+        if (sortBy === "rating") return a.rating - b.rating;
+
+        return 0;
+    });
+    const totalWorkout = currentList.length;
+    const totalTime = currentList.reduce(
+        (sum, item) => sum + item.duration,0,);
+    const totalCalores = currentList.reduce((sum, item) => sum + item.caloriesBurned, 0);
+
+    const handleRemove = (id: number) => {
+        if (activeTab === "todaysPlan") {
+            setTodaysPlan((prev) => prev.filter((item) => item.id !== id));
+        } else {
+            setSaved((prev) => prev.filter((item) => item.id !== id));
+        }
+        toast("Removed");
+    };
+
+    const handleMarkOrdered = (id: number) => {
+        if (!orderedId.includes(id)) {
+            setOrderedId((prev) => [...prev, id]);
+            toast("Ordered");
+        }
+    };
+
+    const renderTabContent = () => {
+        if (sortedList.length === 0) {
+            return (
+                <>
+                    <h2>Nothing here</h2>
+                </>
+            );
+        }
+        return (
+            <div>
+                {sortedList.map((item) => {
+                    const isOrdered =
+                        activeTab === "todaysPlan" && orderedId.includes(item.id);
+
+                    return (
+                        <div
+                            key={item.id}
+                            className={`flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-box border border-base-300 bg-base-200 transition-opacity duration-300 ${isOrdered ? "opacity-50" : "opacity-100"
+                                }`}
+                        >
+                            <div className="flex items-center gap-4">
+                                <Image
+                                    src={item.image}
+                                    alt={item.name}
+                                    className="w-16 h-16 object-cover rounded-lg"
+                                />
+
+                                <div>
+                                    <h4 className="font-bold text-lg">{item.name}</h4>
+
+                                    <p className="text-sm opacity-70">
+                                        Price: ${item.difficulty} • Delivery: {item.duration} hrs •
+                                        Rating: ⭐ {item.rating}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div className="flex items-center gap-2 self-end sm:self-center">
+                                {activeTab === "todaysPlan" && (
+                                    <button
+                                        onClick={() => handleMarkOrdered(item.id)}
+                                        className="btn btn-success btn-sm"
+                                    >
+                                        {isOrdered ? "Ordered" : "Order"}
+                                    </button>
+                                )}
+
+                                <button
+                                    onClick={() => handleRemove(item.id)}
+                                    className="btn btn-error btn-outline btn-sm"
+                                >
+                                    Remove
+                                </button>
+                            </div>
+                        </div>
+                    );
+                })}
+            </div>
+        );
+    };
+
     return (
-        <div>
+        <div className="container flex flex-col mx-auto gap-2">
             <div className="stats shadow">
                 <div className="stat">
                     <div className="stat-figure text-secondary">
@@ -21,7 +129,7 @@ const MyPlan = () => {
                         </svg>
                     </div>
                     <div className="stat-title">Downloads</div>
-                    <div className="stat-value">31K</div>
+                    <div className="stat-value">{totalWorkout}</div>
                     <div className="stat-desc">Jan 1st - Feb 1st</div>
                 </div>
 
@@ -42,7 +150,7 @@ const MyPlan = () => {
                         </svg>
                     </div>
                     <div className="stat-title">New Users</div>
-                    <div className="stat-value">4,200</div>
+                    <div className="stat-value">{totalTime}</div>
                     <div className="stat-desc">↗︎ 400 (22%)</div>
                 </div>
 
@@ -63,29 +171,51 @@ const MyPlan = () => {
                         </svg>
                     </div>
                     <div className="stat-title">New Registers</div>
-                    <div className="stat-value">1,200</div>
+                    <div className="stat-value">{totalCalores}</div>
                     <div className="stat-desc">↘︎ 90 (14%)</div>
                 </div>
-                {/* name of each tab group should be unique */}
-                <div className="tabs tabs-border">
-                    <input type="radio" name="my_tabs_2" className="tab" aria-label="Tab 1" />
-                    <div className="tab-content border-base-300 bg-base-100 p-10">Tab content 1</div>
+            </div>
 
-                    <input type="radio" name="my_tabs_2" className="tab" aria-label="Tab 2" defaultChecked />
-                    <div className="tab-content border-base-300 bg-base-100 p-10">Tab content 2</div>
-
-                    <input type="radio" name="my_tabs_2" className="tab" aria-label="Tab 3" />
-                    <div className="tab-content border-base-300 bg-base-100 p-10">Tab content 3</div>
+            {/* name of each tab group should be unique */}
+            <div className="tabs tabs-box">
+                <input
+                    type="radio"
+                    name="my_tabs_6"
+                    className="tab"
+                    aria-label="todaysPlan"
+                    checked={activeTab === "todaysPlan"}
+                    onChange={() => setActiveTab("todaysPlan")}
+                />
+                <div className="tab-content bg-base-100 border-base-300 p-6">
+                    {renderTabContent()}
                 </div>
-                <select defaultValue="Pick a color" className="select">
-                    <option disabled={true}>Pick a color</option>
-                    <option>Crimson</option>
-                    <option>Amber</option>
-                    <option>Velvet</option>
+
+                <input
+                    type="radio"
+                    name="my_tabs_6"
+                    className="tab"
+                    aria-label="saved"
+                    onChange={() => setActiveTab("saved")}
+                />
+                <div className="tab-content bg-base-100 border-base-300 p-6">
+                    {renderTabContent()}
+                </div>
+
+                <select
+                    onChange={(e) =>
+                        setSortBy(e.target.value as "Time" | "Calories" | "rating")
+                    }
+                    defaultValue="Sort"
+                    className="select ms-auto"
+                >
+                    <option disabled={true}>Sort By</option>
+                    <option value="Time">Time</option>
+                    <option value="Calories">Calories</option>
+                    <option value="rating">Rating</option>
                 </select>
             </div>
         </div>
     );
 };
 
-export default MyPlan;
+export default MyBuild;
