@@ -1,5 +1,4 @@
 "use client";
-
 import { useContextProvider } from "@/context/PlanContext";
 import type { IWorkout } from "@/types";
 import toast from "react-hot-toast";
@@ -64,3 +63,10 @@ const DetailsPageButton = ({ workout }: { workout: IWorkout }) => {
 };
 
 export default DetailsPageButton;
+
+
+
+
+
+
+

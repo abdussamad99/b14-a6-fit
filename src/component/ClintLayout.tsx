@@ -1,4 +1,5 @@
 "use client";
+import Footer from "@/component/Footer";
 import Navbar from "@/component/Navbar";
 import PlanContextProvider from "@/context/PlanContext";
 import type { ReactNode } from "react";
@@ -10,6 +11,7 @@ const ClintLayout = ({ children }: { children: ReactNode }) => {
       <PlanContextProvider>
         <Navbar />
         {children}
+        <Footer/>
         <Toaster />
       </PlanContextProvider>
     </div>
