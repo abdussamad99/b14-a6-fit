@@ -1,5 +1,7 @@
 import NavbarButtons from "@/component/Navbarbuttons";
 import NavLinks from "@/component/NavLinks";
+import Link from "next/link";
+
 
 const Navbar = () => {
   const navlink = (
@@ -27,7 +29,7 @@ const Navbar = () => {
             {navlink}
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl text-[#ffffff]">FITLOG</a>
+        <Link href="/" className="btn btn-ghost text-xl text-[#ffffff]">FITLOG</Link>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal text-[#9ca3af] px-1">
