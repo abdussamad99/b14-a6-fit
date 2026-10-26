@@ -9,7 +9,7 @@ const Footer = () => {
 
 
             <h1>FITLOG</h1>
-<div/>
+</div>
      
             <p>© 2026 FitLog — Workout Library. Train hard, log honest.</p>
         </div>
